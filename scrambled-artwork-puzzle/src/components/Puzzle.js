@@ -41,13 +41,9 @@ const calculateSolutionPositions = (tiles) => {
 
 const Puzzle = ({ data }) => {
   let ref = React.useRef();
-
-  console.log(data);
-  // const processedTiles = data.tiles.map(addTileDimensions).sort((tileA,tileB) => {return tileA.x - tileB.x || tileA.y - tileB.y});
-  // console.log(processedTiles);
-  const solutionTiles = calculateSolutionPositions(data.tiles);
-  console.log(solutionTiles);
-  // TODO calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
+  // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
+  let solutionTiles = null;
+//   console.log(solutionTiles);
 
   // TODO write a render function
 
@@ -62,18 +58,14 @@ const Puzzle = ({ data }) => {
     canvas.height = height;
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
+    // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
+    solutionTiles = calculateSolutionPositions(data.tiles);
 
-  });
-
-  const displayData = () => {
-    let lis = [];
-    let key = 0;
-    for (const tile of data.tiles) {
-      // console.log(tile.image)
-      lis.push(<li key={key++}>{tile.url}</li>);
+    // render solution tiles
+    for (let solutionTile of solutionTiles) {
+        context.drawImage(solutionTile.image, solutionTile.xSolution, solutionTile.ySolution)
     }
-    return lis;
-  };
+  });
 
   return (
     <div>
