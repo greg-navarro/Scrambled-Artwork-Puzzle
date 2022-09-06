@@ -8,8 +8,6 @@ function App() {
   const INTIALSTATE = 1;
   const PUZZLESTATE = 2;
   const SUCCESSSTATE = 3;
-  //Size of canvas onscreen in px
-  const puzzleHeight = 500;
 
   // Controls current state 
   const [currentState, setCurrentState] = React.useState(INTIALSTATE);
@@ -23,7 +21,7 @@ function App() {
 
   return (
     <div className="App">
-      {currentState === INTIALSTATE && <Homepage startPuzzle={setPuzzleState} setPuzzleData={setPuzzleData} canvasHeight={puzzleHeight} />}
+      {currentState === INTIALSTATE && <Homepage startPuzzle={setPuzzleState} setPuzzleData={setPuzzleData} />}
       {currentState === PUZZLESTATE && <Puzzle data={puzzleData} />}
     </div>
   );

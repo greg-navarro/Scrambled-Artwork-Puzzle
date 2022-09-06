@@ -87,13 +87,7 @@ const evaluateSolution = (tiles) => {
   return true;
 }
 
-const calculateCanvasElementWidth = (height, tiles) => {
-  let aspectRatio = tiles.width / tiles.height;
-  let updatedWidth = height * aspectRatio;
-  return updatedWidth
-}
-
-const Puzzle = ({ data, canvasHeight }) => {
+const Puzzle = ({ data }) => {
   let ref = React.useRef();
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
   let puzzleTiles = null;
@@ -116,12 +110,10 @@ const Puzzle = ({ data, canvasHeight }) => {
     let context = canvas.getContext("2d");
     let width = data.width;
     let height = data.height;
-    
-    const updatedWidth = calculateCanvasElementWidth(canvasHeight, data)
     canvas.width = width;
     canvas.height = height;
-    canvas.style.width = `${updatedWidth}px`;
-    canvas.style.height = `${canvasHeight}px`;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
     // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
     let solutionTiles = calculateSolutionPositions(data.tiles);
 
