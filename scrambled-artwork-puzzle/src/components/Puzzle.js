@@ -13,7 +13,6 @@ const calculateSolutionPositions = (tiles) => {
   const processedTiles = tiles.map(addTileDimensions).sort((tileA, tileB) => {
     return tileA.y - tileB.y || tileA.x - tileB.x;
   });
-  // console.log(processedTiles);
   // calculate solution positions
   let currentXSolution = 0;
   let currentYSolution = 0;
@@ -44,8 +43,6 @@ const calculateSolutionPositions = (tiles) => {
 };
 
 const shuffleTiles = (tiles) => {
-  // let shuffledTiles = [];
-
   let sizes = [] // holds width/height pairs
   // populate sizes by iterating through tiles array
   for (let tile of tiles) {
@@ -71,17 +68,23 @@ const shuffleTiles = (tiles) => {
         sort: Math.random(),
       };
     }).sort((tileA, tileB) => tileA.sort - tileB.sort);
-    // console.log(validTiles);
-    // console.log(xyPositions);
+
     // iterate through values to shuffle the positions of the tiles
     for (let i = 0; i < validTiles.length; i++) {
       validTiles[i].xCurrent = xyPositions[i].xCurrent;
       validTiles[i].yCurrent = xyPositions[i].yCurrent;
     }
     // add the now shuffled tiles to the shuffled tiles array
-    // shuffledTiles = [...shuffledTiles, ...validTiles];
   }
   return tiles;
+}
+
+const evaluateSolution = (tiles) => {
+  for (let tile of tiles) {
+    if (tile.xCurrent !== tile.xSolution || tile.yCurrent !== tile.ySolution)
+      return false
+  }
+  return true;
 }
 
 const Puzzle = ({ data }) => {
@@ -113,7 +116,6 @@ const Puzzle = ({ data }) => {
     canvas.style.height = `${height}px`;
     // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
     let solutionTiles = calculateSolutionPositions(data.tiles);
-    //  solutionTiles; // TODO remove
 
     // render solution tiles TODO render shuffled tiles, write shuffle function!
     puzzleTiles = shuffleTiles(solutionTiles);
@@ -129,9 +131,7 @@ const Puzzle = ({ data }) => {
     // add pointer down event handler
     canvas.onpointerdown = (e) => {
         const coordinates = pointerLocation(e);
-        // console.log(coordinates)
         for (let tile of puzzleTiles) {
-            // console.log(`${tile.x} ${tile.y}`)
             if (
                 coordinates.x < tile.xCurrent ||
                 coordinates.x > tile.xCurrent + tile.width ||
@@ -139,9 +139,7 @@ const Puzzle = ({ data }) => {
                 coordinates.y > tile.yCurrent + tile.height
             ) {
                 // do nothing, this tile is not located under pointer
-                // console.log("you didn't get me!")
             } else { 
-                // console.log("you got me!");
                 selectedTile = tile;
             }
         }
@@ -185,9 +183,7 @@ const Puzzle = ({ data }) => {
             coordinates.y > tile.yCurrent + tile.height
           ) {
             // do nothing, this tile is not located under pointer
-            //   console.log("you didn't get me!");
           } else {
-            //   console.log("you got me!");
             swapPosition = tile;
           }
         }
@@ -201,7 +197,6 @@ const Puzzle = ({ data }) => {
           ) {
             context.fillStyle = "#00ff00"; // valid move: apply green indicator tile
             swapTile = swapPosition; // if pointer is released, this tile will be swapped
-            // console.log("a swap will occur");
           } else {
             context.fillStyle = "#ff0000"; // invalid move: apply red indicator tile
           }
@@ -245,7 +240,14 @@ const Puzzle = ({ data }) => {
         swapTile = null;
 
         // check if solution has been reached
+        const solutionReacted = evaluateSolution(puzzleTiles);
         // if it has, fire success indicator and deactivate event handlers on the canvas
+        if (solutionReacted) {
+          canvas.onpointerdown = null;
+          canvas.onpointermove = null;
+          canvas.onpointerup = null;
+          alert("solution reached")
+        }
     }; // end onpointerup handler
   });
 
