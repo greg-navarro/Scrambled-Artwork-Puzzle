@@ -1,13 +1,13 @@
 import React from "react";
 import data from "../test-data/test-data.json";
 
-// Utility function get images for test data
-const fetchImages = async function (testData) {
+// Utility function fetching image tiles
+const fetchImages = async function (levelData) {
   let images = [];
   // use batch of Promises to load images and add an image key/value pair to the 'tiles' array
   // picked up this particular technique from Kimbatt @ https://stackoverflow.com/questions/37854355/wait-for-image-loading-to-complete-in-javascript
   let imageRequestPromises = [];
-  for (let tile of testData.tiles) {
+  for (let tile of levelData.tiles) {
     imageRequestPromises.push(new Promise(resolve => {
         const img = new Image();
         img.onload = () => {
@@ -19,11 +19,11 @@ const fetchImages = async function (testData) {
   } // end for-loop
   await Promise.all(imageRequestPromises);
   // update tiles array with images, set this value in the data object, and return that
-  for (let i = 0; i < testData.tiles.length; i++) { testData.tiles[i].image = images[i]; }
-  return testData;
+  for (let i = 0; i < levelData.tiles.length; i++) { levelData.tiles[i].image = images[i]; }
+  return levelData;
 }
 
-// Fetch records to fill 'finder' when no search has been performed
+// Fetch list of object records when no search has been performed.
 const fetchRecords = async function () {
   let objectRecords = [];
   await fetch("https://www.rijksmuseum.nl/api/nl/collection?imgonly=true&key=geRR5dZh")
@@ -33,6 +33,7 @@ const fetchRecords = async function () {
   return objectRecords;
 }
 
+// Fetch data about a single object given it's objectNumber.
 const fetchObjectData = async function (objectNumber) {
   let data = null;
   const url = `https://www.rijksmuseum.nl/api/nl/collection/${objectNumber}/tiles?key=geRR5dZh`;
@@ -44,33 +45,30 @@ const fetchObjectData = async function (objectNumber) {
 
 // React component
 const Homepage = ({ startPuzzle, setPuzzleData }) => {
-    // const levels = data.levels;
-    // const currentTestLevel = levels.find((level) => {
-    //   return level.name === "z1";
-    // });
-    // let dataWithImages = null;
-    // fetchImages(currentTestLevel).then(value => dataWithImages = value);
-
-    // Starting new functionality here
-    fetchRecords() // initial call to fetch records
+    let artObjectList = fetchRecords() // initial call to fetch records
     let objectNumber = 'SK-C-5'; //null;
 
+    // This function will handle everything thats needs to happen before the App can switch to puzzle view.
+    // First we obtain data for the selected object, then after picking a level (determines # of tiles in puzzle)
+    // we fetch the images for that level, before finally informing App to change state to Puzzle-mode.
     const fetchDataStartPuzzle = async function (objectNumber) {
       // fetch tiles
       let objectData = await fetchObjectData(objectNumber);
+      // extract our chosen difficultly level
+      // currently hardcoded at z3 for demos (this is 9 tiles), but selecting z2 or z1 will increase # of tiles in puzzle.
       let levelData = objectData.levels.find((level) => {
         return level.name === "z3";
       });
-      
-      // setPuzzleData with the tiles
+      // fetch image for each tile
       const levelDataWithImages = await fetchImages(levelData);
-      console.log(levelDataWithImages);
+      // send this data to App so that it can pass is to <Puzzle />
       setPuzzleData(levelDataWithImages);
-      // once this is over, call startPuzzle()
-      
+      // initiate change in state to Puzzle-mode
       startPuzzle();
     };
 
+    // This function simply checks that an object has been selected by the user when the 'Start Puzzle' button has been pressed.
+    // If it hasn't we alert the user that they must select an image before proceeding.
     const startPuzzleClickHandler = () => {
       if (objectNumber === null) {
         alert("pick a result, then press the button")
@@ -79,8 +77,17 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       }
     }
 
-    const result = (artObject) => {
-      return <li key={artObject.objectNumber} onClick={() => { objectNumber = artObject.objectNumber }}></li>
+    // Sub component to render 
+    const option = (artObject) => {
+      return <li key={artObject.objectNumber} onClick={() => { objectNumber = artObject.objectNumber }}>{artObject.title}</li>
+    }
+
+    const renderOptions = () => {
+      let options = []
+      for (let artObject in artObjectList) {
+        options.push(option(artObject));
+      }
+      return options;
     }
 
     return (
