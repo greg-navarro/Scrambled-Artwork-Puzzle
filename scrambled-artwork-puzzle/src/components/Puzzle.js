@@ -1,13 +1,19 @@
 // data processing functions
-// const addTileDimensions = ()
-
-const Puzzle = ({ data }) => {
-    console.log(data)
-    const processedTiles = data.tiles.map((tile) => {
+const addTileDimensions = (tile)  => {
         tile.width = tile.image.width;
         tile.height = tile.image.height;
         return tile;
-    });
+}
+
+// const sortGrid = (tileA, tileB) => {
+//     if 
+// }
+
+
+
+const Puzzle = ({ data }) => {
+    console.log(data)
+    const processedTiles = data.tiles.map(addTileDimensions).sort((a,b) => {return a.x - b.x || a.y - b.y});
     console.log(processedTiles);
 
     const displayData = () => {
