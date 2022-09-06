@@ -106,7 +106,6 @@ const Puzzle = ({ data }) => {
 
     // onpointermove event handler
     canvas.onpointermove = (e) => {
-      // context.clearRect(0, 0, solutionTiles.width, solutionTiles.height);
       // only perform if a tile is selected
       if (selectedTile !== null) {
         // get pointer location
@@ -126,6 +125,8 @@ const Puzzle = ({ data }) => {
           }
         }
         // render the selected tile centered on the pointer location
+        context.save(); // push state onto stack
+        context.globalAlpha = 0.4; // moving image and swap indicator should have a transparent quality
         context.drawImage(
           selectedTile.image,
           coordinates.x - selectedTile.width / 2,
@@ -150,8 +151,6 @@ const Puzzle = ({ data }) => {
 
         // Draw colored indicator to communicate to user whether a swap may occur or not.
         if (swapPosition !== null && swapPosition !== selectedTile) {
-          context.save(); // push state onto stack
-          context.globalAlpha = 0.4; // indicator should have a transparent quality
           // check that the swap position has the same dimensions as the selected tile, this determines further behavious
           if (
             swapPosition.height === selectedTile.height &&
@@ -159,10 +158,10 @@ const Puzzle = ({ data }) => {
           ) {
             context.fillStyle = "#00ff00"; // valid move: apply green indicator tile
             swapTile = swapPosition; // if pointer is released, this tile will be swapped
-            console.log("a swap will occur")
+            console.log("a swap will occur");
           } else {
             context.fillStyle = "#ff0000"; // invalid move: apply red indicator tile
-          } 
+          }
           // proceeds to draw indicator
           context.fillRect(
             swapPosition.xCurrent,
@@ -170,8 +169,8 @@ const Puzzle = ({ data }) => {
             swapPosition.width,
             swapPosition.height
           );
-          context.restore(); // restore previous state
-      }
+        }
+        context.restore(); // restore previous state (resets alpha channel and fill color)
       }
     } // end onpointermove handler
 
@@ -201,7 +200,10 @@ const Puzzle = ({ data }) => {
         }
         selectedTile = null;
         swapTile = null;
-    };
+
+        // check if solution has been reached
+        // if it has, fire success indicator and deactivate event handlers on the canvas
+    }; // end onpointerup handler
   });
 
   return (
@@ -216,7 +218,6 @@ const Puzzle = ({ data }) => {
             width: "500px",
             height: "500px",
             border: "1px solid rgba(0, 0, 0, 0.05)",
-            backgroundColor: "blue",
           }}
         ></canvas>
       </div>
