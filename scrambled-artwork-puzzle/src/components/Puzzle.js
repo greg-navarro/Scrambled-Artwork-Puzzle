@@ -112,7 +112,7 @@ const Puzzle = ({ data }) => {
         // get pointer location
         const coordinates = pointerLocation(e);
         // clear canvas
-        context.clearRect(0, 0, solutionTiles.width, solutionTiles.height); // TODO examine why clearing is not occuring
+        context.clearRect(0, 0, canvas.width, canvas.height); // TODO examine why clearing is not occuring
         // render each tile except the selected one
         for (let tile of solutionTiles) {
           if (tile !== selectedTile) {
@@ -176,8 +176,6 @@ const Puzzle = ({ data }) => {
     } // end onpointermove handler
 
     canvas.onpointerup = (e) => {
-        // get pointer location
-        const coordinates = pointerLocation(e);
         // perform a swap, if it is available
         if (selectedTile !== null && swapTile !== null) {
           const tempTile = {xCurrent:swapTile.xCurrent, yCurrent: swapTile.yCurrent};
@@ -185,7 +183,6 @@ const Puzzle = ({ data }) => {
           swapTile.yCurrent = selectedTile.yCurrent;
           selectedTile.xCurrent = tempTile.xCurrent;
           selectedTile.yCurrent = tempTile.yCurrent;
-          console.log(solutionTiles)
         }
         context.clearRect(0, 0, canvas.width, canvas.height);
         // render tiles
@@ -196,8 +193,8 @@ const Puzzle = ({ data }) => {
             solutionTile.yCurrent
           );
           context.strokeRect(
-            solutionTile.xSolution,
-            solutionTile.ySolution,
+            solutionTile.xCurrent,
+            solutionTile.yCurrent,
             solutionTile.width,
             solutionTile.height
           );
