@@ -45,7 +45,14 @@ const fetchObjectData = async function (objectNumber) {
 
 // React component
 const Homepage = ({ startPuzzle, setPuzzleData }) => {
-    let artObjectList = fetchRecords() // initial call to fetch records
+    let [page, setPage] = React.useState(0);
+    let [artObjectList, setArtObjectList] = React.useState([]);
+
+    React.useEffect(() => {
+      fetchRecords().then(response => setArtObjectList(response))
+    }, [page]);
+
+    // setArtObjectList(fetchRecords()) // initial call to fetch records
     let objectNumber = 'SK-C-5'; //null;
 
     // This function will handle everything thats needs to happen before the App can switch to puzzle view.
@@ -84,7 +91,9 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     const renderOptions = () => {
       let options = []
+      // console.log(artObjectList)
       for (let artObject in artObjectList) {
+        console.log(artObject)
         options.push(option(artObject));
       }
       return options;
@@ -93,7 +102,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     return (
       <div>
         <div>Homepage</div>
-        <ul className="results-container"></ul>
+        <ul className="results-container">{ artObjectList.map(object => option(object)) }</ul>
         {<button onClick={() => { startPuzzleClickHandler() }}>Start puzzle</button>}
       </div>
     );
