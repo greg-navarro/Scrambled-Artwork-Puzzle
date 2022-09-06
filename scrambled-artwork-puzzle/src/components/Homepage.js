@@ -37,11 +37,11 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     let dataWithImages = null;
 
     // setPuzzleData(currentTestLevel);
-    fetchImages(currentTestLevel);
+    fetchImages(currentTestLevel).then(value => console.log(value));
     React.useEffect(() => {
-        dataWithImages = fetchImages(currentTestLevel);
-        console.log(dataWithImages);
-        console.log("images loaded! go ahead with next test!") 
+        // dataWithImages = fetchImages(currentTestLevel);
+        // console.log(dataWithImages);
+        // console.log("images loaded! go ahead with next test!") 
     }, []);
 
     return (
