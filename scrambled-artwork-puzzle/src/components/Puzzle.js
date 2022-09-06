@@ -31,6 +31,10 @@ const calculateSolutionPositions = (tiles) => {
     // set X/Y solution properties
     tile.xSolution = currentXSolution;
     tile.ySolution = currentYSolution;
+    // declare properties for the x/y positions of the tiles while they are moved around the puzzle
+    // these will allow for shuffling and temporary reordering
+    tile.xCurrent = tile.xSolution;
+    tile.yCurrent = tile.ySolution;
     // update currentXCoordinate
     currentXSolution += tile.width;
     // update lastHeight just in case this is the last element in the row (no lookahead)
@@ -73,8 +77,8 @@ const Puzzle = ({ data }) => {
     for (let solutionTile of solutionTiles) {
       context.drawImage(
         solutionTile.image,
-        solutionTile.xSolution,
-        solutionTile.ySolution
+        solutionTile.xCurrent,
+        solutionTile.yCurrent
       );
       context.strokeRect(solutionTile.xSolution, solutionTile.ySolution, solutionTile.width, solutionTile.height);
     }
@@ -86,10 +90,10 @@ const Puzzle = ({ data }) => {
         for (let tile of solutionTiles) {
             // console.log(`${tile.x} ${tile.y}`)
             if (
-                coordinates.x < tile.xSolution ||
-                coordinates.x > tile.xSolution + tile.width ||
-                coordinates.y < tile.ySolution ||
-                coordinates.y > tile.ySolution + tile.height
+                coordinates.x < tile.xCurrent ||
+                coordinates.x > tile.xCurrent + tile.width ||
+                coordinates.y < tile.yCurrent ||
+                coordinates.y > tile.yCurrent + tile.height
             ) {
                 // do nothing, this tile is not located under pointer
                 // console.log("you didn't get me!")
@@ -108,14 +112,14 @@ const Puzzle = ({ data }) => {
         // get pointer location
         const coordinates = pointerLocation(e);
         // clear canvas
-        context.clearRect(0, 0, solutionTiles.width, solutionTiles.height);
+        context.clearRect(0, 0, solutionTiles.width, solutionTiles.height); // TODO examine why clearing is not occuring
         // render each tile except the selected one
         for (let tile of solutionTiles) {
           if (tile !== selectedTile) {
-            context.drawImage(tile.image, tile.xSolution, tile.ySolution);
+            context.drawImage(tile.image, tile.xCurrent, tile.yCurrent);
             context.strokeRect(
-              tile.xSolution,
-              tile.ySolution,
+              tile.xCurrent,
+              tile.yCurrent,
               tile.width,
               tile.height
             );
@@ -128,57 +132,68 @@ const Puzzle = ({ data }) => {
           coordinates.y - selectedTile.height / 2
         );
         // identify the current 'drop' position
-        let dropPosition = null;
+        let swapPosition = null;
         for (let tile of solutionTiles) {
           if (
-            coordinates.x < tile.xSolution ||
-            coordinates.x > tile.xSolution + tile.width ||
-            coordinates.y < tile.ySolution ||
-            coordinates.y > tile.ySolution + tile.height
+            coordinates.x < tile.xCurrent ||
+            coordinates.x > tile.xCurrent + tile.width ||
+            coordinates.y < tile.yCurrent ||
+            coordinates.y > tile.yCurrent + tile.height
           ) {
             // do nothing, this tile is not located under pointer
             //   console.log("you didn't get me!");
           } else {
             //   console.log("you got me!");
-            dropPosition = tile;
+            swapPosition = tile;
           }
         }
 
         // Draw colored indicator to communicate to user whether a swap may occur or not.
-        if (dropPosition !== selectedTile) {
-          context.save();
-          context.globalAlpha = 0.4;
+        if (swapPosition !== null && swapPosition !== selectedTile) {
+          context.save(); // push state onto stack
+          context.globalAlpha = 0.4; // indicator should have a transparent quality
+          // check that the swap position has the same dimensions as the selected tile, this determines further behavious
           if (
-            dropPosition.height === selectedTile.height &&
-            dropPosition.width === selectedTile.width
+            swapPosition.height === selectedTile.height &&
+            swapPosition.width === selectedTile.width
           ) {
             context.fillStyle = "#00ff00"; // valid move: apply green indicator tile
-            swapTile = dropPosition; // if pointer is released, this tile will be swapped
+            swapTile = swapPosition; // if pointer is released, this tile will be swapped
             console.log("a swap will occur")
           } else {
             context.fillStyle = "#ff0000"; // invalid move: apply red indicator tile
           } 
+          // proceeds to draw indicator
           context.fillRect(
-            dropPosition.xSolution,
-            dropPosition.ySolution,
-            dropPosition.width,
-            dropPosition.height
+            swapPosition.xCurrent,
+            swapPosition.yCurrent,
+            swapPosition.width,
+            swapPosition.height
           );
-          context.restore(); 
+          context.restore(); // restore previous state
       }
       }
-    }
+    } // end onpointermove handler
 
     canvas.onpointerup = (e) => {
         // get pointer location
-        selectedTile = null;
+        const coordinates = pointerLocation(e);
+        // perform a swap, if it is available
+        if (selectedTile !== null && swapTile !== null) {
+          const tempTile = {xCurrent:swapTile.xCurrent, yCurrent: swapTile.yCurrent};
+          swapTile.xCurrent = selectedTile.xCurrent;
+          swapTile.yCurrent = selectedTile.yCurrent;
+          selectedTile.xCurrent = tempTile.xCurrent;
+          selectedTile.yCurrent = tempTile.yCurrent;
+          console.log(solutionTiles)
+        }
         context.clearRect(0, 0, canvas.width, canvas.height);
-        // render
+        // render tiles
         for (let solutionTile of solutionTiles) {
           context.drawImage(
             solutionTile.image,
-            solutionTile.xSolution,
-            solutionTile.ySolution
+            solutionTile.xCurrent,
+            solutionTile.yCurrent
           );
           context.strokeRect(
             solutionTile.xSolution,
