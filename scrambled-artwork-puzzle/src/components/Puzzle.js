@@ -5,16 +5,20 @@ const addTileDimensions = (tile)  => {
         return tile;
 }
 
-// const sortGrid = (tileA, tileB) => {
-//     if 
-// }
+
 
 
 
 const Puzzle = ({ data }) => {
     console.log(data)
-    const processedTiles = data.tiles.map(addTileDimensions).sort((a,b) => {return a.x - b.x || a.y - b.y});
+    const processedTiles = data.tiles.map(addTileDimensions).sort((tileA,tileB) => {return tileA.x - tileB.x || tileA.y - tileB.y});
     console.log(processedTiles);
+
+    // TODO calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
+
+    // TODO write a render function
+
+    // TODO render images onto our canvas
 
     const displayData = () => {
         let lis = [];
@@ -31,6 +35,7 @@ const Puzzle = ({ data }) => {
     return <div>
         Puzzle
         <div>
+            {/* TODO add <canvas> */}
             <ul>
                 {displayData()}
             </ul>
