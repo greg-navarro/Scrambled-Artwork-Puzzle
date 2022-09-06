@@ -113,10 +113,10 @@ const Puzzle = ({ data }) => {
     canvas.style.height = `${height}px`;
     // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
     let solutionTiles = calculateSolutionPositions(data.tiles);
-    puzzleTiles = solutionTiles; // TODO remove
+    //  solutionTiles; // TODO remove
 
     // render solution tiles TODO render shuffled tiles, write shuffle function!
-    shuffleTiles(solutionTiles);
+    puzzleTiles = shuffleTiles(solutionTiles);
     for (let tile of puzzleTiles) {
       context.drawImage(
         tile.image,
