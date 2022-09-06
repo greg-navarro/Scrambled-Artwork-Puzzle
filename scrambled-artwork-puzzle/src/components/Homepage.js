@@ -32,7 +32,7 @@ const fetchImages = async function (testData) {
 const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const levels = data.levels;
     const currentTestLevel = levels.find((level) => {
-      return level.name === "z4";
+      return level.name === "z3";
     });
     let dataWithImages = null;
 
