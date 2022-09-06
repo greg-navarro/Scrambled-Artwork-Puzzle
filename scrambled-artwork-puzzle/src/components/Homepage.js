@@ -37,7 +37,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     let dataWithImages = null;
 
     // setPuzzleData(currentTestLevel);
-    fetchImages(currentTestLevel).then(value => console.log(value));
+    fetchImages(currentTestLevel).then(value => dataWithImages = value);
     React.useEffect(() => {
         // dataWithImages = fetchImages(currentTestLevel);
         // console.log(dataWithImages);
