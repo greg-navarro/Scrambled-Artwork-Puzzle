@@ -63,15 +63,23 @@ const Puzzle = ({ data }) => {
 
 
 
-    return <div>
+    return (
+      <div>
         Puzzle
         <div>
-            {/* TODO add <canvas> */}
-            <ul>
-                {displayData()}
-            </ul>
+          {/* TODO add <canvas> */}
+          <canvas
+            id="canvas"
+            style={{
+              width: "500px",
+              height: "500px",
+              border: "1px solid rgba(0, 0, 0, 0.05)",
+              backgroundColor: "blue"
+            }}
+          ></canvas>
         </div>
-        </div>;
+      </div>
+    );
 };
 
 export default Puzzle;
