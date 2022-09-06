@@ -6,13 +6,12 @@ const Puzzle = ({ data }) => {
     // data.then(value => puzzleData = value);
 
     const displayData = () => {
-        // let lis = [];
-        // let key = 0;
-        // for (const tile of puzzleData.tiles) {
-        //     lis.push(<li key={key}>{tile.url}</li>)
-        // }
-        // return lis;
-        console.log(data);
+        let lis = [];
+        let key = 0;
+        for (const tile of data.tiles) {
+            lis.push(<li key={key++}>{tile.url}</li>)
+        }
+        return lis;
     }
 
 

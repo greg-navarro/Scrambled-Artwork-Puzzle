@@ -20,7 +20,7 @@ const fetchImages = async function (testData) {
   } // end for-loop
   await Promise.all(imageRequestPromises);
 //   console.log("all images loaded")
-  console.log(images)
+//   console.log(images)
 
   // update tiles array with images, set this value in the data object, and return that
   for (let i = 0; i < testData.tiles.length; i++) { testData.tiles[i].image = images[i]; }
