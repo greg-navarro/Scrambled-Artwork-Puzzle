@@ -13,7 +13,7 @@ const calculateSolutionPositions = (tiles) => {
   const processedTiles = tiles.map(addTileDimensions).sort((tileA, tileB) => {
     return tileA.y - tileB.y || tileA.x - tileB.x;
   });
-  console.log(processedTiles);
+  // console.log(processedTiles);
   // calculate solution positions
   let currentXSolution = 0;
   let currentYSolution = 0;
@@ -44,6 +44,7 @@ const Puzzle = ({ data }) => {
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
   let solutionTiles = null;
   let selectedTile = null;
+  let swapTile = null;
 
   // calculates the current position of the pointer on the canvas
   const pointerLocation = (e) => {
@@ -81,7 +82,7 @@ const Puzzle = ({ data }) => {
     // add pointer down event handler
     canvas.onpointerdown = (e) => {
         const coordinates = pointerLocation(e);
-        console.log(coordinates)
+        // console.log(coordinates)
         for (let tile of solutionTiles) {
             // console.log(`${tile.x} ${tile.y}`)
             if (
@@ -91,9 +92,9 @@ const Puzzle = ({ data }) => {
                 coordinates.y > tile.ySolution + tile.height
             ) {
                 // do nothing, this tile is not located under pointer
-                console.log("you didn't get me!")
+                // console.log("you didn't get me!")
             } else { 
-                console.log("you got me!");
+                // console.log("you got me!");
                 selectedTile = tile;
             }
         }
@@ -101,12 +102,14 @@ const Puzzle = ({ data }) => {
 
     // onpointermove event handler
     canvas.onpointermove = (e) => {
-         context.clearRect(0, 0, solutionTiles.width, solutionTiles.height);
+      // context.clearRect(0, 0, solutionTiles.width, solutionTiles.height);
+      // only perform if a tile is selected
       if (selectedTile !== null) {
+        // get pointer location
         const coordinates = pointerLocation(e);
         // clear canvas
         context.clearRect(0, 0, solutionTiles.width, solutionTiles.height);
-        // render each tile except the selected on
+        // render each tile except the selected one
         for (let tile of solutionTiles) {
           if (tile !== selectedTile) {
             context.drawImage(tile.image, tile.xSolution, tile.ySolution);
@@ -118,7 +121,7 @@ const Puzzle = ({ data }) => {
             );
           }
         }
-        // render the moving tile
+        // render the selected tile centered on the pointer location
         context.drawImage(
           selectedTile.image,
           coordinates.x - selectedTile.width / 2,
@@ -141,28 +144,33 @@ const Puzzle = ({ data }) => {
           }
         }
 
-        // draw drop indicator
-        context.save();
-        context.globalAlpha = 0.4;
-        if (
-          dropPosition.height === selectedTile.height &&
-          dropPosition.width === selectedTile.width
-        ) {
-          context.fillStyle = "#00ff00"; // valid move: apply green indicator tile
-        } else {
-          context.fillStyle = "#ff0000"; // invalid move: apply red indicator tile
-        } 
-        context.fillRect(
-          dropPosition.xSolution,
-          dropPosition.ySolution,
-          dropPosition.width,
-          dropPosition.height
-        );
-        context.restore();
+        // Draw colored indicator to communicate to user whether a swap may occur or not.
+        if (dropPosition !== selectedTile) {
+          context.save();
+          context.globalAlpha = 0.4;
+          if (
+            dropPosition.height === selectedTile.height &&
+            dropPosition.width === selectedTile.width
+          ) {
+            context.fillStyle = "#00ff00"; // valid move: apply green indicator tile
+            swapTile = dropPosition; // if pointer is released, this tile will be swapped
+            console.log("a swap will occur")
+          } else {
+            context.fillStyle = "#ff0000"; // invalid move: apply red indicator tile
+          } 
+          context.fillRect(
+            dropPosition.xSolution,
+            dropPosition.ySolution,
+            dropPosition.width,
+            dropPosition.height
+          );
+          context.restore(); 
+      }
       }
     }
 
     canvas.onpointerup = (e) => {
+        // get pointer location
         selectedTile = null;
         context.clearRect(0, 0, canvas.width, canvas.height);
         // render
@@ -179,7 +187,8 @@ const Puzzle = ({ data }) => {
             solutionTile.height
           );
         }
-
+        selectedTile = null;
+        swapTile = null;
     };
   });
 
