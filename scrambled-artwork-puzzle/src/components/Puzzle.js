@@ -89,23 +89,29 @@ const evaluateSolution = (tiles) => {
 
 const calculateCanvasElementWidth = (height, tiles) => {
   let aspectRatio = tiles.width / tiles.height;
+  console.log(aspectRatio)
   let updatedWidth = height * aspectRatio;
+  console.log(height)
   return updatedWidth
 }
 
 const Puzzle = ({ data, canvasHeight }) => {
+  console.log(canvasHeight)
   let ref = React.useRef();
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
   let puzzleTiles = null;
   let selectedTile = null;
   let swapTile = null;
+  // width and height ratios for calculating pointer position on a resized canvas
+  let widthRatio = 1;
+  let heightRatio = 1;
 
   // calculates the current position of the pointer on the canvas
   const pointerLocation = (e) => {
     const rect = document.getElementById("canvas").getBoundingClientRect();
     let coordinates = {
-      x: e.clientX - rect.x,
-      y: e.clientY - rect.y,
+      x: (e.clientX - rect.x)*widthRatio,
+      y: (e.clientY - rect.y)*heightRatio,
     };
     return coordinates;
   };
@@ -118,6 +124,9 @@ const Puzzle = ({ data, canvasHeight }) => {
     let height = data.height;
     
     const updatedWidth = calculateCanvasElementWidth(canvasHeight, data)
+    widthRatio = width / updatedWidth;
+    heightRatio = height / canvasHeight;
+    console.log(updatedWidth)
     canvas.width = width;
     canvas.height = height;
     canvas.style.width = `${updatedWidth}px`;

@@ -23,8 +23,12 @@ function App() {
 
   return (
     <div className="App">
-      {currentState === INTIALSTATE && <Homepage startPuzzle={setPuzzleState} setPuzzleData={setPuzzleData} canvasHeight={puzzleHeight} />}
-      {currentState === PUZZLESTATE && <Puzzle data={puzzleData} />}
+      {currentState === INTIALSTATE && (
+        <Homepage startPuzzle={setPuzzleState} setPuzzleData={setPuzzleData} />
+      )}
+      {currentState === PUZZLESTATE && (
+        <Puzzle data={puzzleData} canvasHeight={puzzleHeight} />
+      )}
     </div>
   );
 }
