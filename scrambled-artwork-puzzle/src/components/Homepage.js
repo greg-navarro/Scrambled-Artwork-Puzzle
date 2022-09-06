@@ -1,5 +1,5 @@
 import React from "react";
-import data from "../test-data/test-data.json";
+// import data from "../test-data/test-data.json";
 
 // Utility function fetching image tiles
 const fetchImages = async function (levelData) {
@@ -29,7 +29,7 @@ const fetchRecords = async function () {
   await fetch("https://www.rijksmuseum.nl/api/nl/collection?imgonly=true&key=geRR5dZh")
   .then(response => response.json())
   .then(response => objectRecords = response.artObjects);
-  // console.log(objectRecords);
+
   return objectRecords;
 }
 
@@ -86,17 +86,17 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     // Sub component to render 
     const option = (artObject) => {
-      return <li key={artObject.objectNumber} onClick={() => { objectNumber = artObject.objectNumber }}>{artObject.title}</li>
-    }
-
-    const renderOptions = () => {
-      let options = []
-      // console.log(artObjectList)
-      for (let artObject in artObjectList) {
-        console.log(artObject)
-        options.push(option(artObject));
-      }
-      return options;
+      return (
+        <li
+          key={artObject.objectNumber}
+          onClick={() => {
+            alert(artObject.objectNumber);
+            objectNumber = artObject.objectNumber;
+          }}
+        >
+          <div>{artObject.title}</div>
+        </li>
+      );
     }
 
     return (
