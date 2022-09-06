@@ -41,13 +41,19 @@ const calculateSolutionPositions = (tiles) => {
 
 const Puzzle = ({ data }) => {
   let ref = React.useRef();
-  // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
+  // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
   let solutionTiles = null;
-//   console.log(solutionTiles);
 
-  // TODO write a render function
+  // calculates the current position of the pointer on the canvas
+  const pointerLocation = (e) => {
+    const rect = document.getElementById("canvas").getBoundingClientRect();
+    let coordinates = {
+      x: e.clientX - rect.x,
+      y: e.clientY - rect.y,
+    };
+    return coordinates;
+  };
 
-  // TODO render images onto our canvas
   // once the canvas is loaded re-size the canvas via JS api (for resolution), attach event handlers, and render images.
   React.useEffect(() => {
     let canvas = ref.current;
@@ -63,8 +69,15 @@ const Puzzle = ({ data }) => {
 
     // render solution tiles
     for (let solutionTile of solutionTiles) {
-        context.drawImage(solutionTile.image, solutionTile.xSolution, solutionTile.ySolution)
+      context.drawImage(
+        solutionTile.image,
+        solutionTile.xSolution,
+        solutionTile.ySolution
+      );
+      context.strokeRect(solutionTile.xSolution, solutionTile.ySolution, solutionTile.width, solutionTile.height);
     }
+
+    // add pointer down 
   });
 
   return (
