@@ -9,15 +9,20 @@ function App() {
   const PUZZLESTATE = 2;
   const SUCCESSSTATE = 3;
 
+  // Controls current state 
   const [currentState, setCurrentState] = React.useState(INTIALSTATE);
+  // Houses data used to run puzzle i.e. images, dimensions, coordinates, etc.
+  const [puzzleData, setPuzzleData] = React.useState(null);
 
+  // Functions for other components to access/modify state elements
+  // Switches to PUZZLESTATE
   const setPuzzleState = () => { setCurrentState(2); };
 
 
   return (
     <div className="App">
-      {currentState === INTIALSTATE && <Homepage startPuzzle={setPuzzleState} />}
-      {currentState === PUZZLESTATE && <Puzzle />}
+      {currentState === INTIALSTATE && <Homepage startPuzzle={setPuzzleState} setPuzzleData={setPuzzleData} />}
+      {currentState === PUZZLESTATE && <Puzzle data={puzzleData} />}
     </div>
   );
 }
