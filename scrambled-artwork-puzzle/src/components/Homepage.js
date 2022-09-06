@@ -1,5 +1,7 @@
+import React from "react";
 import data from "../test-data/test-data.json";
 
+// Utility function get images for test data
 const fetchImages = async function (testData) {
   let images = [];
 
@@ -17,28 +19,35 @@ const fetchImages = async function (testData) {
     })); 
   } // end for-loop
   await Promise.all(imageRequestPromises);
-  console.log("all images loaded")
+//   console.log("all images loaded")
   console.log(images)
 
   // update tiles array with images, set this value in the data object, and return that
   for (let i = 0; i < testData.tiles.length; i++) { testData.tiles[i].image = images[i]; }
-  console.log(testData.tiles);
-  return images;
+//   console.log(testData.tiles);
+  return testData;
 }
 
+// React component
 const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const levels = data.levels;
     const currentTestLevel = levels.find((level) => {
       return level.name === "z4";
     });
+    let dataWithImages = null;
 
     // setPuzzleData(currentTestLevel);
     fetchImages(currentTestLevel);
+    React.useEffect(() => {
+        dataWithImages = fetchImages(currentTestLevel);
+        console.log(dataWithImages);
+        console.log("images loaded! go ahead with next test!") 
+    }, []);
 
     return (
       <div>
         <div>Homepage</div>
-        <button onClick={() => startPuzzle()}>Start puzzle</button>
+        {<button onClick={() => { setPuzzleData(dataWithImages); startPuzzle(); }}>Start puzzle</button>}
       </div>
     );
 }
