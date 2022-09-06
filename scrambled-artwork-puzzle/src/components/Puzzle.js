@@ -164,6 +164,22 @@ const Puzzle = ({ data }) => {
 
     canvas.onpointerup = (e) => {
         selectedTile = null;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        // render
+        for (let solutionTile of solutionTiles) {
+          context.drawImage(
+            solutionTile.image,
+            solutionTile.xSolution,
+            solutionTile.ySolution
+          );
+          context.strokeRect(
+            solutionTile.xSolution,
+            solutionTile.ySolution,
+            solutionTile.width,
+            solutionTile.height
+          );
+        }
+
     };
   });
 
