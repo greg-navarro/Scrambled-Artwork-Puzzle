@@ -1,5 +1,5 @@
-const Puzzle = () => {
-
+const Puzzle = ({ data }) => {
+    console.log(data)
     return <div>Puzzle</div>;
 };
 
