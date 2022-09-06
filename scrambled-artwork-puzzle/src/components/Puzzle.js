@@ -43,10 +43,51 @@ const calculateSolutionPositions = (tiles) => {
   return processedTiles;
 };
 
+const shuffleTiles = (tiles) => {
+  // let shuffledTiles = [];
+
+  let sizes = [] // holds width/height pairs
+  // populate sizes by iterating through tiles array
+  for (let tile of tiles) {
+    // check if we have this size recorderd, if so don't add another
+    let lookup = sizes.some((size) => size.height === tile.height && size.width === size.width);
+    if (!lookup) {
+      sizes.push({width: tile.width, height: tile.height});
+    }
+  }
+
+  // for each size, get a list of tiles with those size, shuffle their xCurrent and yCurrent values, and add them the shuffledTiles array
+  for (let size of sizes) {
+    // filter
+    let validTiles = tiles.filter(
+      (tile) => tile.height === size.height && tile.width === size.width
+    );
+    // make a separate array of xCurrent yCurrent values (as objects)
+    // shuffle xyPositions
+    let xyPositions = validTiles.map((validTile) => {
+      return {
+        xCurrent: validTile.xCurrent,
+        yCurrent: validTile.yCurrent,
+        sort: Math.random(),
+      };
+    }).sort((tileA, tileB) => tileA.sort - tileB.sort);
+    // console.log(validTiles);
+    // console.log(xyPositions);
+    // iterate through values to shuffle the positions of the tiles
+    for (let i = 0; i < validTiles.length; i++) {
+      validTiles[i].xCurrent = xyPositions[i].xCurrent;
+      validTiles[i].yCurrent = xyPositions[i].yCurrent;
+    }
+    // add the now shuffled tiles to the shuffled tiles array
+    // shuffledTiles = [...shuffledTiles, ...validTiles];
+  }
+  return tiles;
+}
+
 const Puzzle = ({ data }) => {
   let ref = React.useRef();
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
-  let solutionTiles = null;
+  let puzzleTiles = null;
   let selectedTile = null;
   let swapTile = null;
 
@@ -71,23 +112,25 @@ const Puzzle = ({ data }) => {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
-    solutionTiles = calculateSolutionPositions(data.tiles);
+    let solutionTiles = calculateSolutionPositions(data.tiles);
+    puzzleTiles = solutionTiles; // TODO remove
 
     // render solution tiles TODO render shuffled tiles, write shuffle function!
-    for (let solutionTile of solutionTiles) {
+    shuffleTiles(solutionTiles);
+    for (let tile of puzzleTiles) {
       context.drawImage(
-        solutionTile.image,
-        solutionTile.xCurrent,
-        solutionTile.yCurrent
+        tile.image,
+        tile.xCurrent,
+        tile.yCurrent
       );
-      context.strokeRect(solutionTile.xSolution, solutionTile.ySolution, solutionTile.width, solutionTile.height);
+      context.strokeRect(tile.xCurrent, tile.yCurrent, tile.width, tile.height);
     }
 
     // add pointer down event handler
     canvas.onpointerdown = (e) => {
         const coordinates = pointerLocation(e);
         // console.log(coordinates)
-        for (let tile of solutionTiles) {
+        for (let tile of puzzleTiles) {
             // console.log(`${tile.x} ${tile.y}`)
             if (
                 coordinates.x < tile.xCurrent ||
@@ -113,7 +156,7 @@ const Puzzle = ({ data }) => {
         // clear canvas
         context.clearRect(0, 0, canvas.width, canvas.height); // TODO examine why clearing is not occuring
         // render each tile except the selected one
-        for (let tile of solutionTiles) {
+        for (let tile of puzzleTiles) {
           if (tile !== selectedTile) {
             context.drawImage(tile.image, tile.xCurrent, tile.yCurrent);
             context.strokeRect(
@@ -134,7 +177,7 @@ const Puzzle = ({ data }) => {
         );
         // identify the current 'drop' position
         let swapPosition = null;
-        for (let tile of solutionTiles) {
+        for (let tile of puzzleTiles) {
           if (
             coordinates.x < tile.xCurrent ||
             coordinates.x > tile.xCurrent + tile.width ||
@@ -158,7 +201,7 @@ const Puzzle = ({ data }) => {
           ) {
             context.fillStyle = "#00ff00"; // valid move: apply green indicator tile
             swapTile = swapPosition; // if pointer is released, this tile will be swapped
-            console.log("a swap will occur");
+            // console.log("a swap will occur");
           } else {
             context.fillStyle = "#ff0000"; // invalid move: apply red indicator tile
           }
@@ -185,7 +228,7 @@ const Puzzle = ({ data }) => {
         }
         context.clearRect(0, 0, canvas.width, canvas.height);
         // render tiles
-        for (let solutionTile of solutionTiles) {
+        for (let solutionTile of puzzleTiles) {
           context.drawImage(
             solutionTile.image,
             solutionTile.xCurrent,
