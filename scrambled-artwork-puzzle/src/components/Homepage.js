@@ -77,6 +77,12 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
         setSelectedOption(null);
       }
     };
+
+    const performSearchQuery = () => {
+      // perform search and populate art object list
+      // sets page to zero
+      // sets selected option to null
+    }
     // setArtObjectList(fetchRecords()) // initial call to fetch records
     let objectNumber = 'SK-C-5'; //null;
 
