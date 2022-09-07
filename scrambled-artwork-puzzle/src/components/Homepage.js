@@ -45,8 +45,8 @@ const fetchObjectData = async function (objectNumber) {
 
 // React component
 const Homepage = ({ startPuzzle, setPuzzleData }) => {
-    let [page, setPage] = React.useState(0);
-    let [artObjectList, setArtObjectList] = React.useState([]);
+    const [page, setPage] = React.useState(0);
+    const [artObjectList, setArtObjectList] = React.useState([]);
 
     React.useEffect(() => {
       fetchRecords(page).then(response => setArtObjectList(response))
@@ -55,12 +55,12 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     const loadMoreResults = () => {
       console.log(`what up ${page+1}`)
-      fetchRecords(3).then((response) => {
+      fetchRecords(page+1).then((response) => {
         console.log(response)
         setArtObjectList(response);
         
       });    
-      setPage(page++);
+      setPage(page+1);
     }
 
     // setArtObjectList(fetchRecords()) // initial call to fetch records
