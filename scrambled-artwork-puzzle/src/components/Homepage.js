@@ -47,6 +47,7 @@ const fetchObjectData = async function (objectNumber) {
 const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const [page, setPage] = React.useState(1);
     const [artObjectList, setArtObjectList] = React.useState([]);
+    const [selectedOption, setSelectedOption] = React.useState(null);
 
     React.useEffect(() => {
       fetchRecords(page).then(response => setArtObjectList(response))
@@ -85,7 +86,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       // extract our chosen difficultly level
       // currently hardcoded at z3 for demos (this is 9 tiles), but selecting z2 or z1 will increase # of tiles in puzzle.
       let levelData = objectData.levels.find((level) => {
-        return level.name === "z3";
+        return level.name === "z2";
       });
       // fetch image for each tile
       const levelDataWithImages = await fetchImages(levelData);
@@ -98,10 +99,10 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     // This function simply checks that an object has been selected by the user when the 'Start Puzzle' button has been pressed.
     // If it hasn't we alert the user that they must select an image before proceeding.
     const startPuzzleClickHandler = () => {
-      if (objectNumber === null) {
+      if (selectedOption === null) {
         alert("pick a result, then press the button")
       } else {
-        fetchDataStartPuzzle(objectNumber)
+        fetchDataStartPuzzle(selectedOption.objectNumber)
       }
     }
 
@@ -111,9 +112,11 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
         <li
           key={artObject.objectNumber}
           onClick={() => {
-            alert(artObject.objectNumber);
+            // alert(artObject.objectNumber);
+            setSelectedOption(artObject);
             objectNumber = artObject.objectNumber;
           }}
+          className={`${artObject === selectedOption ? "active": ""}`}
         >
           <div>{artObject.title}</div>
         </li>

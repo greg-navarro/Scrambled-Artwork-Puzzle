@@ -17,7 +17,22 @@ li {
   list-style: none;
   /* border-style: solid; */
   /* padding: 0.5em; */
+
 }
+
+li:hover {
+  cursor: pointer;
+  background-color: #5f0a5f;
+  color: #ffffff;
+}
+
+li.active {
+  cursor: pointer;
+  background-color: #925f92;
+  color: #ffffff;
+}
+
+
 
 li div {
   border-style: solid;
