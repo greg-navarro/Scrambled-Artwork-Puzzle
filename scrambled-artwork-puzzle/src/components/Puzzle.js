@@ -263,10 +263,26 @@ const Puzzle = ({ data, canvasHeight }) => {
           canvas.onpointerdown = null;
           canvas.onpointermove = null;
           canvas.onpointerup = null;
-          alert("solution reached")
+          
+          context.save();
+          context.font = "48px serif";
+          context.fillStyle = "#ffffff";
+          context.fillText("SUCCESS", width / 3, height / 2);
+          context.restore();
+          alert("solution reached");
         }
     }; // end onpointerup handler
-  });
+
+    // check if we are at a success state (if the puzzle has too few tiles this can happen)
+    if (evaluateSolution(puzzleTiles)) {
+      context.save();
+      context.font = "48px serif";
+      context.fillStyle= "#ffffff";
+      context.fillText("SUCCESS", width/3, height/2);
+      context.restore();
+    }
+
+  }); // end useEffect
 
   return (
     <div>

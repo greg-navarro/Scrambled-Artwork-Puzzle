@@ -106,7 +106,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       // extract our chosen difficultly level
       // currently hardcoded at z3 for demos (this is 9 tiles), but selecting z2 or z1 will increase # of tiles in puzzle.
       let levelData = objectData.levels.find((level) => {
-        return level.name === "z2";
+        return level.name === "z4";
       });
       // fetch image for each tile
       const levelDataWithImages = await fetchImages(levelData);
