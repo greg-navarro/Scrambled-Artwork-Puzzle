@@ -56,6 +56,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const [artObjectList, setArtObjectList] = React.useState([]);
     const [selectedOption, setSelectedOption] = React.useState(null);
     const [query, setQuery] = React.useState("Rembrandt");
+    const [difficulty, setDifficulty] = React.useState("z3");
 
     React.useEffect(() => {
       fetchRecords(query, page).then(response => setArtObjectList(response))
@@ -106,7 +107,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       // extract our chosen difficultly level
       // currently hardcoded at z3 for demos (this is 9 tiles), but selecting z2 or z1 will increase # of tiles in puzzle.
       let levelData = objectData.levels.find((level) => {
-        return level.name === "z4";
+        return level.name === difficulty;
       });
       // fetch image for each tile
       const levelDataWithImages = await fetchImages(levelData);
@@ -148,7 +149,12 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
         <div>Homepage</div>
         <label htmlfor="search-query">Search query:</label>
 
-        <input type="text" name="search-query" value={query} onChange={(e) => performSearchQuery(e.target.value)}></input>
+        <input
+          type="text"
+          name="search-query"
+          value={query}
+          onChange={(e) => performSearchQuery(e.target.value)}
+        ></input>
         <ul className="results-container">
           {artObjectList.map((object) => option(object))}
         </ul>
@@ -156,6 +162,16 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
         <button onClick={() => nextPage()}>Next page</button>
         <br />
         <button onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
+        <br/>
+        <label>
+          {"select difficulty(if you are getting too few OR too many tiles adjust this):"}
+          <select value={difficulty} onChange={(e) => {setDifficulty(e.target.value)}}>
+            <option value="z4">Fewest tiles</option>
+            <option value="z3">A few tiles</option>
+            <option value="z2">More than a few tiles</option>
+            <option value="z1">Most tiles</option>
+          </select>
+        </label>
       </div>
     );
 }
