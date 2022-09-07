@@ -95,7 +95,7 @@ const calculateCanvasElementWidth = (height, tiles) => {
   return updatedWidth
 }
 
-const Puzzle = ({ data, canvasHeight }) => {
+const Puzzle = ({ data, canvasHeight, changeState }) => {
   console.log(canvasHeight)
   let ref = React.useRef();
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
@@ -299,6 +299,7 @@ const Puzzle = ({ data, canvasHeight }) => {
           }}
         ></canvas>
       </div>
+      <button onClick={() => changeState()}>return to previous page</button>
     </div>
   );
 };

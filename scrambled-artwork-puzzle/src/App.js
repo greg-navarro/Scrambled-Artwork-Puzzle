@@ -20,6 +20,8 @@ function App() {
   // Switches to PUZZLESTATE
   const setPuzzleState = () => { setCurrentState(2); };
 
+  const setInitialState = () => { setCurrentState(1); }
+
 
   return (
     <div className="App">
@@ -27,7 +29,7 @@ function App() {
         <Homepage startPuzzle={setPuzzleState} setPuzzleData={setPuzzleData} />
       )}
       {currentState === PUZZLESTATE && (
-        <Puzzle data={puzzleData} canvasHeight={puzzleHeight} />
+        <Puzzle data={puzzleData} canvasHeight={puzzleHeight} changeState={setInitialState} />
       )}
     </div>
   );
