@@ -51,7 +51,17 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     React.useEffect(() => {
       fetchRecords(page).then(response => setArtObjectList(response))
       console.log("useEffectFired")
-    }, [page]);
+    }, []);
+
+    const loadMoreResults = () => {
+      console.log(`what up ${page+1}`)
+      fetchRecords(3).then((response) => {
+        console.log(response)
+        setArtObjectList(response);
+        
+      });    
+      setPage(page++);
+    }
 
     // setArtObjectList(fetchRecords()) // initial call to fetch records
     let objectNumber = 'SK-C-5'; //null;
@@ -104,7 +114,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       <div>
         <div>Homepage</div>
         <ul className="results-container">{ artObjectList.map(object => option(object)) }</ul>
-        <button onClick={() => { setPage(page++) }}>More options</button>
+        <button onClick={() => loadMoreResults()}>More options</button>
         {<button onClick={() => { startPuzzleClickHandler() }}>Start puzzle</button>}
       </div>
     );
