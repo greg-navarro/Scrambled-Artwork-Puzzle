@@ -269,7 +269,7 @@ const Puzzle = ({ data, canvasHeight }) => {
           context.fillStyle = "#ffffff";
           context.fillText("SUCCESS", width / 3, height / 2);
           context.restore();
-          alert("solution reached");
+          // alert("solution reached");
         }
     }; // end onpointerup handler
 
