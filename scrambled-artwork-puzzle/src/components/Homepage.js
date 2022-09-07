@@ -62,6 +62,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
         
       });    
       setPage(page+1);
+      setSelectedOption(null);
     }
 
     const previousPage = () => {
@@ -72,6 +73,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
           setArtObjectList(response);
         });
         setPage(page - 1);
+        setSelectedOption(null);
       }
     };
     // setArtObjectList(fetchRecords()) // initial call to fetch records
