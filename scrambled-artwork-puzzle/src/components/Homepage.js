@@ -24,9 +24,9 @@ const fetchImages = async function (levelData) {
 }
 
 // Fetch list of object records when no search has been performed.
-const fetchRecords = async function () {
+const fetchRecords = async function (pageNo) {
   let objectRecords = [];
-  await fetch("https://www.rijksmuseum.nl/api/nl/collection?imgonly=true&key=geRR5dZh")
+  await fetch(`https://www.rijksmuseum.nl/api/nl/collection?imgonly=true&p=${pageNo}&key=geRR5dZh`)
   .then(response => response.json())
   .then(response => objectRecords = response.artObjects);
 
@@ -49,7 +49,8 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     let [artObjectList, setArtObjectList] = React.useState([]);
 
     React.useEffect(() => {
-      fetchRecords().then(response => setArtObjectList(response))
+      fetchRecords(page).then(response => setArtObjectList(response))
+      console.log("useEffectFired")
     }, [page]);
 
     // setArtObjectList(fetchRecords()) // initial call to fetch records
@@ -103,6 +104,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       <div>
         <div>Homepage</div>
         <ul className="results-container">{ artObjectList.map(object => option(object)) }</ul>
+        <button onClick={() => { setPage(page++) }}>More options</button>
         {<button onClick={() => { startPuzzleClickHandler() }}>Start puzzle</button>}
       </div>
     );
