@@ -24,9 +24,16 @@ const fetchImages = async function (levelData) {
 }
 
 // Fetch list of object records when no search has been performed.
-const fetchRecords = async function (pageNo) {
+const fetchRecords = async function (query, pageNo) {
+  let url = "";
+  if (query.length > 0) {
+    url = `https://www.rijksmuseum.nl/api/nl/collection?q=${encodeURI(query)}&imgonly=true&p=${pageNo}&key=geRR5dZh`;
+    console.log(url)
+  } else {
+    url = `https://www.rijksmuseum.nl/api/nl/collection?imgonly=true&p=${pageNo}&key=geRR5dZh`;
+  }
   let objectRecords = [];
-  await fetch(`https://www.rijksmuseum.nl/api/nl/collection?imgonly=true&p=${pageNo}&key=geRR5dZh`)
+  await fetch(url)
   .then(response => response.json())
   .then(response => objectRecords = response.artObjects);
 
@@ -48,16 +55,16 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const [page, setPage] = React.useState(1);
     const [artObjectList, setArtObjectList] = React.useState([]);
     const [selectedOption, setSelectedOption] = React.useState(null);
-    const [query, setQuery] = React.useState("");
+    const [query, setQuery] = React.useState("Rembrandt");
 
     React.useEffect(() => {
-      fetchRecords(page).then(response => setArtObjectList(response))
+      fetchRecords(query, page).then(response => setArtObjectList(response))
       console.log("useEffectFired")
     }, []);
 
     const nextPage = () => {
       console.log(`what up ${page+1}`)
-      fetchRecords(page+1).then((response) => {
+      fetchRecords(query, page+1).then((response) => {
         console.log(response)
         setArtObjectList(response);
         
@@ -69,7 +76,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const previousPage = () => {
       if (page > 1) {
         console.log(`what up ${page - 1}`);
-        fetchRecords(page - 1).then((response) => {
+        fetchRecords(query, page - 1).then((response) => {
           console.log(response);
           setArtObjectList(response);
         });
@@ -78,10 +85,14 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       }
     };
 
-    const performSearchQuery = () => {
+    const performSearchQuery = (q) => {
       // perform search and populate art object list
+      fetchRecords(q, page).then((response) => setArtObjectList(response));
+      setQuery(q);
       // sets page to zero
+      setPage(0);
       // sets selected option to null
+      setSelectedOption(null);
     }
     // setArtObjectList(fetchRecords()) // initial call to fetch records
     let objectNumber = 'SK-C-5'; //null;
@@ -137,7 +148,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
         <div>Homepage</div>
         <label htmlfor="search-query">Search query:</label>
 
-        <input type="text" name="search-query" value={query} onChange={(e) => setQuery(e.target.value)}></input>
+        <input type="text" name="search-query" value={query} onChange={(e) => performSearchQuery(e.target.value)}></input>
         <ul className="results-container">
           {artObjectList.map((object) => option(object))}
         </ul>
