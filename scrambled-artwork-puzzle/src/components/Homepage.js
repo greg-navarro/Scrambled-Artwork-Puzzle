@@ -45,7 +45,7 @@ const fetchObjectData = async function (objectNumber) {
 
 // React component
 const Homepage = ({ startPuzzle, setPuzzleData }) => {
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState(1);
     const [artObjectList, setArtObjectList] = React.useState([]);
 
     React.useEffect(() => {
@@ -53,7 +53,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       console.log("useEffectFired")
     }, []);
 
-    const loadMoreResults = () => {
+    const nextPage = () => {
       console.log(`what up ${page+1}`)
       fetchRecords(page+1).then((response) => {
         console.log(response)
@@ -63,6 +63,16 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       setPage(page+1);
     }
 
+    const previousPage = () => {
+      if (page > 1) {
+        console.log(`what up ${page - 1}`);
+        fetchRecords(page - 1).then((response) => {
+          console.log(response);
+          setArtObjectList(response);
+        });
+        setPage(page - 1);
+      }
+    };
     // setArtObjectList(fetchRecords()) // initial call to fetch records
     let objectNumber = 'SK-C-5'; //null;
 
@@ -113,9 +123,14 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     return (
       <div>
         <div>Homepage</div>
-        <ul className="results-container">{ artObjectList.map(object => option(object)) }</ul>
-        <button onClick={() => loadMoreResults()}>More options</button>
-        {<button onClick={() => { startPuzzleClickHandler() }}>Start puzzle</button>}
+        <ul className="results-container">
+          {artObjectList.map((object) => option(object))}
+        </ul>
+        <button onClick={() => previousPage()}>Previous page</button>
+        <button onClick={() => nextPage()}>Next page</button>
+        <br />
+          <button onClick={() => startPuzzleClickHandler() }> Start puzzle</button>
+        
       </div>
     );
 }
