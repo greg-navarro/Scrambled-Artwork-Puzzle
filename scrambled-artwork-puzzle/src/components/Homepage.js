@@ -48,6 +48,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const [page, setPage] = React.useState(1);
     const [artObjectList, setArtObjectList] = React.useState([]);
     const [selectedOption, setSelectedOption] = React.useState(null);
+    const [query, setQuery] = React.useState("");
 
     React.useEffect(() => {
       fetchRecords(page).then(response => setArtObjectList(response))
@@ -128,14 +129,16 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     return (
       <div>
         <div>Homepage</div>
+        <label htmlfor="search-query">Search query:</label>
+
+        <input type="text" name="search-query" value={query} onChange={(e) => setQuery(e.target.value)}></input>
         <ul className="results-container">
           {artObjectList.map((object) => option(object))}
         </ul>
         <button onClick={() => previousPage()}>Previous page</button>
         <button onClick={() => nextPage()}>Next page</button>
         <br />
-          <button onClick={() => startPuzzleClickHandler() }> Start puzzle</button>
-        
+        <button onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
       </div>
     );
 }
