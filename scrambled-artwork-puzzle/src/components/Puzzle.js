@@ -285,9 +285,12 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
   }); // end useEffect
 
   return (
-    <div>
-      Puzzle
-      <div>
+    <div className="full-height">
+      <div className="header">
+        <h1>Scrambled Artwork Puzzle</h1>
+      </div>
+      <div className="flex-column">
+      <div className="flex-container">
         {/* TODO add <canvas> */}
         <canvas
           ref={ref}
@@ -299,7 +302,10 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
           }}
         ></canvas>
       </div>
-      <button onClick={() => changeState()}>return to previous page</button>
+      <div className="flex-container flex-left">
+        <button onClick={() => changeState()}>return to previous page</button>
+      </div>
+      </div>
     </div>
   );
 };
