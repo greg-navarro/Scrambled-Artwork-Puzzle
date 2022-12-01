@@ -138,8 +138,9 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
             setSelectedOption(artObject);
             objectNumber = artObject.objectNumber;
           }}
-          className={`${artObject === selectedOption ? "active": ""}`}
+          className={`option flex-container ${artObject === selectedOption ? "active": ""}`}
         >
+          <img src={artObject.webImage.url} alt="art image" />
           <div>{artObject.title} by {artObject.principalOrFirstMaker}</div>
         </li>
       );
