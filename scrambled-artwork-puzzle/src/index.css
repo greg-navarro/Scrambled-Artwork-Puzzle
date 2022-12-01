@@ -99,3 +99,13 @@ li .flex-container {
 .flex-container canvas {
   margin-top: 1em;
 }
+
+.footer button {
+  margin: 0.25em;
+}
+
+.start-button {
+  font-size: medium;
+  padding: 0.25em;
+  background-color: #50db2a;
+}

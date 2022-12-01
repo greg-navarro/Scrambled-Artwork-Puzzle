@@ -172,7 +172,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
           <button onClick={() => previousPage()}>Previous page</button>
           <button onClick={() => nextPage()}>Next page</button>
           <br />
-          <button onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
+          <button className="start-button" onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
           <br/>
           <label>
             {"select difficulty(if you are getting too few OR too many tiles adjust this):"}
