@@ -28,7 +28,7 @@ const fetchRecords = async function (query, pageNo) {
   let url = "";
   if (query.length > 0) {
     url = `https://www.rijksmuseum.nl/api/nl/collection?q=${encodeURI(query)}&imgonly=true&p=${pageNo}&key=geRR5dZh`;
-    console.log(url)
+    // console.log(url)
   } else {
     url = `https://www.rijksmuseum.nl/api/nl/collection?imgonly=true&p=${pageNo}&key=geRR5dZh`;
   }
@@ -60,13 +60,13 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     React.useEffect(() => {
       fetchRecords(query, page).then(response => setArtObjectList(response))
-      console.log("useEffectFired")
+      // console.log("useEffectFired")
     }, []);
 
     const nextPage = () => {
-      console.log(`what up ${page+1}`)
+      // console.log(`what up ${page+1}`)
       fetchRecords(query, page+1).then((response) => {
-        console.log(response)
+        // console.log(response)
         setArtObjectList(response);
         
       });    
@@ -76,9 +76,9 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     const previousPage = () => {
       if (page > 1) {
-        console.log(`what up ${page - 1}`);
+        // console.log(`what up ${page - 1}`);
         fetchRecords(query, page - 1).then((response) => {
-          console.log(response);
+          // console.log(response);
           setArtObjectList(response);
         });
         setPage(page - 1);
@@ -129,6 +129,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     // Sub component to render 
     const option = (artObject) => {
+      console.log(artObject)
       return (
         <li
           key={artObject.objectNumber}
@@ -139,7 +140,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
           }}
           className={`${artObject === selectedOption ? "active": ""}`}
         >
-          <div>{artObject.title}</div>
+          <div>{artObject.title} by {artObject.principalOrFirstMaker}</div>
         </li>
       );
     }
@@ -147,7 +148,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     return (
       <div>
         <div>Homepage</div>
-        <label htmlfor="search-query">Search query:</label>
+        <label htmlFor="search-query">Search query:</label>
 
         <input
           type="text"
