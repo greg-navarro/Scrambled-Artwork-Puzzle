@@ -169,20 +169,20 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
           {artObjectList.map((object) => option(object))}
         </ul>
         <div className="footer">
-        <button onClick={() => previousPage()}>Previous page</button>
-        <button onClick={() => nextPage()}>Next page</button>
-        <br />
-        <button onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
-        <br/>
-        <label>
-          {"select difficulty(if you are getting too few OR too many tiles adjust this):"}
-          <select value={difficulty} onChange={(e) => {setDifficulty(e.target.value)}}>
-            <option value="z4">Fewest tiles</option>
-            <option value="z3">A few tiles</option>
-            <option value="z2">More than a few tiles</option>
-            <option value="z1">Most tiles</option>
-          </select>
-        </label>
+          <button onClick={() => previousPage()}>Previous page</button>
+          <button onClick={() => nextPage()}>Next page</button>
+          <br />
+          <button onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
+          <br/>
+          <label>
+            {"select difficulty(if you are getting too few OR too many tiles adjust this):"}
+            <select value={difficulty} onChange={(e) => {setDifficulty(e.target.value)}}>
+              <option value="z4">Fewest tiles</option>
+              <option value="z3">A few tiles</option>
+              <option value="z2">More than a few tiles</option>
+              <option value="z1">Most tiles</option>
+            </select>
+          </label>
         </div>
       </div>
     );
