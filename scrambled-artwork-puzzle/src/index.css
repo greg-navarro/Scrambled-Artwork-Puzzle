@@ -53,7 +53,7 @@ li.active {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 4fr;
   align-items: center;
 }
 
@@ -64,4 +64,14 @@ li.active {
 li .flex-container {
   justify-content: end;
   margin: 0.25em
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25em 0.25em;
+}
+
+.footer {
+  text-align: center;
 }

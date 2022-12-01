@@ -153,18 +153,22 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     return (
       <div>
-        <h1>Scrambled Artwork Puzzle</h1>
-        <label htmlFor="search-query">Search query:</label>
-
-        <input
-          type="text"
-          name="search-query"
-          value={query}
-          onChange={(e) => performSearchQuery(e.target.value)}
-        ></input>
+        <div className="header">
+          <h1>Scrambled Artwork Puzzle</h1>
+          <div className="search-input flex-container">
+          <label htmlFor="search-query">Search query:</label>
+          <input
+            type="text"
+            name="search-query"
+            value={query}
+            onChange={(e) => performSearchQuery(e.target.value)}
+          ></input>
+          </div>
+        </div>
         <ul className="results-container">
           {artObjectList.map((object) => option(object))}
         </ul>
+        <div className="footer">
         <button onClick={() => previousPage()}>Previous page</button>
         <button onClick={() => nextPage()}>Next page</button>
         <br />
@@ -179,6 +183,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
             <option value="z1">Most tiles</option>
           </select>
         </label>
+        </div>
       </div>
     );
 }
