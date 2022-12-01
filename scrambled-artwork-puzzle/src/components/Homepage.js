@@ -138,17 +138,22 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
             setSelectedOption(artObject);
             objectNumber = artObject.objectNumber;
           }}
-          className={`option flex-container ${artObject === selectedOption ? "active": ""}`}
+          className={`option grid-container ${artObject === selectedOption ? "active": ""}`}
         >
-          <img src={artObject.webImage.url} alt="art image" />
-          <div>{artObject.title} by {artObject.principalOrFirstMaker}</div>
+          <div className="flex-container"> 
+            <img className="inline-item" src={artObject.webImage.url} alt="art image" />
+          </div>
+          <div className="inline-item">
+            <h2>{artObject.title}</h2> 
+            <p>{artObject.principalOrFirstMaker}</p>
+          </div>
         </li>
       );
     }
 
     return (
       <div>
-        <div>Homepage</div>
+        <h1>Scrambled Artwork Puzzle</h1>
         <label htmlFor="search-query">Search query:</label>
 
         <input
