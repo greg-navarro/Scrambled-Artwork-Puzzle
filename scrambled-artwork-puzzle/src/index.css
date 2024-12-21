@@ -1,50 +1,63 @@
+/* Base styles */
 body {
   margin: 0;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5; /* Soft light gray background */
+  color: #333; /* Dark text for contrast */
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/* List styles */
 ul {
-  margin: 0.25em 2em;
+  margin: 1em 2em;
+  padding: 0;
+  list-style-type: none;
 }
-
 
 li {
   list-style: none;
-  border-style: solid;
-  margin: 0.5em;
-  padding: 0.25em;
-
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 0.5em 0;
+  padding: 1em;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
 }
 
 li:hover {
   cursor: pointer;
-  background-color: #5f0a5f;
+  background-color: #007bff; /* Soft blue hover color */
   color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 li.active {
-  cursor: pointer;
-  background-color: #925f92;
+  background-color: #0056b3; /* Darker blue for active items */
   color: #ffffff;
 }
 
+/* Option styles */
 .option {
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em;
 }
 
 .option img {
   max-width: 3em;
+  border-radius: 4px;
+  margin-right: 1em;
 }
 
+/* Flex and grid containers */
 .flex-container {
   display: flex;
   justify-content: center;
@@ -54,58 +67,143 @@ li.active {
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 4fr;
+  gap: 1em;
   align-items: center;
 }
 
-/* .inline-item {
-  display: inline-block;
-} */
-
 li .flex-container {
-  justify-content: end;
-  margin: 0.25em
+  justify-content: flex-end;
+  margin-top: 1em;
 }
 
+/* Header styles */
 .header {
   display: flex;
   justify-content: space-between;
-  margin: 0.25em 0.25em;
+  align-items: center;
+  margin: 1em;
+  padding: 1em;
+  background-color: #007bff; /* Soft blue background */
+  color: #ffffff;
+  border-radius: 8px;
 }
 
+.header h1 {
+  font-size: 2em;
+  margin: 0;
+}
+
+/* Search input styles */
+.search-input {
+  display: flex;
+  align-items: center;
+  color: black;
+  background-color: #ffffff;
+  padding: 0.5em;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-input label {
+  margin-right: 1em;
+  font-size: 1em;
+}
+
+.search-input input {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+  font-size: 1em;
+}
+
+.search-input input:focus {
+  outline: none;
+  border-color: #007bff; /* Highlight on focus with blue */
+}
+
+/* Footer styles */
 .footer {
   text-align: center;
+  margin-top: 2em;
 }
 
+.footer button {
+  padding: 0.75em 1.5em;
+  margin: 0.5em;
+  background-color: #28a745; /* Soft green */
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.footer button:hover {
+  background-color: #218838; /* Darker green for hover effect */
+  transform: translateY(-2px);
+}
+
+.footer button:active {
+  transform: translateY(1px);
+}
+
+/* Start button */
+.start-button {
+  font-size: 1.25em;
+  padding: 0.75em 1.5em;
+  background-color: #ffc107; /* Warm amber for the start button */
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-button:hover {
+  background-color: #e0a800; /* Slightly darker amber */
+}
+
+.start-button:active {
+  background-color: #c69500; /* Even darker amber */
+}
+
+/* Select dropdown styles */
+label {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+select {
+  padding: 0.5em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff; /* Blue focus border */
+}
+
+/* Flex column layout */
 .flex-column {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* height: 100%; */
-  justify-content: space-between;
-  align-items: center;
   gap: 2em;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Root and App container */
 #root, .App {
   width: 100%;
   height: 100%;
 }
 
-/* .full-height {
-  width: 100%;
-  height: 100%;
-} */
-
 .flex-container canvas {
   margin-top: 1em;
-}
-
-.footer button {
-  margin: 0.25em;
-}
-
-.start-button {
-  font-size: medium;
-  padding: 0.25em;
-  background-color: #50db2a;
 }
