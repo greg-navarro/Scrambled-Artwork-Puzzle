@@ -319,10 +319,24 @@ select:focus {
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
+
+}
+
+.home-button button {
+  padding: 0.75em 1.5em;
+  margin: 0.5em;
+  background-color: #CCCDCD;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .controls-container button {
   padding: 1em;
+  background-color: #FFFFFF;
 }
 
 /* Root and App container */

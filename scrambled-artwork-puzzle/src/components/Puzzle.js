@@ -337,7 +337,7 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
             style={{
               width: "500px",
               height: "500px",
-              border: "1px solid rgba(0, 0, 0, 0.05)",
+              border: "3px solid rgba(0, 0, 0, 1)",
             }}
           ></canvas>
         </div>
