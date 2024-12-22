@@ -88,12 +88,11 @@ const evaluateSolution = (tiles) => {
 }
 
 const evaluatePercentageCorrect = (tiles) => {
-  let total = 0
-  let correct = 0
+  let total = tiles.length
+  let correct = tiles.length
   for (let tile of tiles) {
-    total = total + 1
-    if (tile.xCurrent === tile.xSolution || tile.yCurrent === tile.ySolution)
-      correct = correct + 1
+    if (tile.xCurrent !== tile.xSolution || tile.yCurrent !== tile.ySolution)
+      correct = correct - 1
   }
   return {total: total, correct: correct};
 }
@@ -112,7 +111,7 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
   const [dataIn, setDataIn] = React.useState(data)
   const [solutionTiles, setSolutionTiles] = React.useState(() => calculateSolutionPositions(dataIn.tiles))
   const [puzzleTiles, setPuzzleTiles] = React.useState(() => shuffleTiles(solutionTiles))
-  const [totalTiles, setTotalTiles] = React.useState(0)
+  const [totalTiles, setTotalTiles] = React.useState(dataIn.tiles.length)
   const [correctTiles, setCorrectTiles] = React.useState(0)
   
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)

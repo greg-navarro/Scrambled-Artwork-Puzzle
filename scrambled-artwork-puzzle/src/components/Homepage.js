@@ -56,7 +56,7 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const [artObjectList, setArtObjectList] = React.useState([]);
     const [selectedOption, setSelectedOption] = React.useState(null);
     const [query, setQuery] = React.useState("");
-    const [difficulty, setDifficulty] = React.useState("z1");
+    const [difficulty, setDifficulty] = React.useState("z2");
     const [loading, setLoading] = React.useState(true)
 
     React.useEffect(() => {
