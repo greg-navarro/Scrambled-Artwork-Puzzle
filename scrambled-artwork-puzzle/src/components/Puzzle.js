@@ -304,13 +304,13 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
     }; // end onpointerup handler
 
     // check if we are at a success state (if the puzzle has too few tiles this can happen)
-    if (evaluateSolution(puzzleTiles)) {
-      context.save();
-      context.font = "48px serif";
-      context.fillStyle= "#ffffff";
-      context.fillText("SUCCESS", width/3, height/2);
-      context.restore();
-    }
+    // if (evaluateSolution(puzzleTiles)) {
+    //   context.save();
+    //   context.font = "48px serif";
+    //   context.fillStyle= "#ffffff";
+    //   context.fillText("SUCCESS", width/3, height/2);
+    //   context.restore();
+    // }
 
   }); // end useEffect
 
@@ -364,7 +364,8 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
           <div className="instructions-container">
             <h2>Success!</h2> 
             <p>You solved the puzzle.</p>
-            <p>Use the Reshuffle button to play again, or use the Homepage button to select another image.</p>
+            {/* <p>Use the Reshuffle button to play again, or use the Homepage button to select another image.</p> */}
+            <p>Use the Homepage button to select another image.</p>
             <div className="success-options">
               <button onClick={() => changeState()}>Return to Homepage</button>
               <button onClick={() => reshuffleTiles()}>Play Again</button>
