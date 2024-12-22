@@ -110,10 +110,13 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
   console.log(data)
   let ref = React.useRef();
   const [dataIn, setDataIn] = React.useState(data)
+  const [solutionTiles, setSolutionTiles] = React.useState(() => calculateSolutionPositions(dataIn.tiles))
+  const [puzzleTiles, setPuzzleTiles] = React.useState(() => shuffleTiles(solutionTiles))
   const [totalTiles, setTotalTiles] = React.useState(0)
   const [correctTiles, setCorrectTiles] = React.useState(0)
+  
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
-  let puzzleTiles = null;
+  // let puzzleTiles = null;
   let selectedTile = null;
   let swapTile = null;
   // width and height ratios for calculating pointer position on a resized canvas
@@ -136,7 +139,7 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
     let context = canvas.getContext("2d");
     let width = data.width;
     let height = data.height;
-    
+    // format canvas
     const updatedWidth = calculateCanvasElementWidth(canvasHeight, data)
     widthRatio = width / updatedWidth;
     heightRatio = height / canvasHeight;
@@ -146,10 +149,11 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
     canvas.style.width = `${updatedWidth}px`;
     canvas.style.height = `${canvasHeight}px`;
     // calculate solutionX and solutionY as we loop through processedTiles (and update processedTiles)
-    let solutionTiles = calculateSolutionPositions(data.tiles);
+    // let solutionTiles = calculateSolutionPositions(data.tiles);
 
     // render solution tiles TODO render shuffled tiles, write shuffle function!
-    puzzleTiles = shuffleTiles(solutionTiles);
+    // let newPuzzleTiles = shuffleTiles(solutionTiles);
+    setPuzzleTiles(puzzleTiles)
     const correctRatio = evaluatePercentageCorrect(puzzleTiles)
     console.log(correctRatio)
     setCorrectTiles(correctRatio.correct)
@@ -275,12 +279,12 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
         swapTile = null;
 
         // check if solution has been reached and update correct tiles out of total
-        const solutionReacted = evaluateSolution(puzzleTiles);
+        const solutionReached = evaluateSolution(puzzleTiles);
         const correctRatio = evaluatePercentageCorrect(puzzleTiles)
         setCorrectTiles(correctRatio.correct)
         setTotalTiles(correctRatio.total)
         // if it has, fire success indicator and deactivate event handlers on the canvas
-        if (solutionReacted) {
+        if (solutionReached) {
           canvas.onpointerdown = null;
           canvas.onpointermove = null;
           canvas.onpointerup = null;
