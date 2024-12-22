@@ -91,7 +91,9 @@ li.active:hover{
   gap: 1em;
   align-items: center;
   padding: 0.5em;
-  background-color: hsla(0, 0%, 16%, 0);
+  /* background-color: hsla(0, 0%, 16%, 0); */
+  background-color: #CCCDCD;
+  border-radius: 10px;
   margin: 20px;
   padding: 0.5em;
 }

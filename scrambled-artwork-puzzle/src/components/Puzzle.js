@@ -87,6 +87,17 @@ const evaluateSolution = (tiles) => {
   return true;
 }
 
+const evaluatePercentageCorrect = (tiles) => {
+  let total = 0
+  let correct = 0
+  for (let tile of tiles) {
+    total = total + 1
+    if (tile.xCurrent === tile.xSolution || tile.yCurrent === tile.ySolution)
+      correct = correct + 1
+  }
+  return {total: total, correct: correct};
+}
+
 const calculateCanvasElementWidth = (height, tiles) => {
   let aspectRatio = tiles.width / tiles.height;
   console.log(aspectRatio)
@@ -98,6 +109,9 @@ const calculateCanvasElementWidth = (height, tiles) => {
 const Puzzle = ({ data, canvasHeight, changeState }) => {
   console.log(data)
   let ref = React.useRef();
+  const [dataIn, setDataIn] = React.useState(data)
+  const [totalTiles, setTotalTiles] = React.useState(0)
+  const [correctTiles, setCorrectTiles] = React.useState(0)
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
   let puzzleTiles = null;
   let selectedTile = null;
@@ -136,6 +150,10 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
 
     // render solution tiles TODO render shuffled tiles, write shuffle function!
     puzzleTiles = shuffleTiles(solutionTiles);
+    const correctRatio = evaluatePercentageCorrect(puzzleTiles)
+    console.log(correctRatio)
+    setCorrectTiles(correctRatio.correct)
+    setTotalTiles(correctRatio.total) 
     for (let tile of puzzleTiles) {
       context.drawImage(
         tile.image,
@@ -256,8 +274,11 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
         selectedTile = null;
         swapTile = null;
 
-        // check if solution has been reached
+        // check if solution has been reached and update correct tiles out of total
         const solutionReacted = evaluateSolution(puzzleTiles);
+        const correctRatio = evaluatePercentageCorrect(puzzleTiles)
+        setCorrectTiles(correctRatio.correct)
+        setTotalTiles(correctRatio.total)
         // if it has, fire success indicator and deactivate event handlers on the canvas
         if (solutionReacted) {
           canvas.onpointerdown = null;
@@ -302,6 +323,7 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
           <div className="info">
             <h2><strong>Title:</strong> {data.objectName}</h2>
             <h3><strong>Artist:</strong> {data.artistName}</h3>
+            <p><strong>Correctly placed tiles:</strong> {correctTiles} / {totalTiles}</p>
           </div>
           <div className="home-button">
             <button onClick={() => changeState()}>Homepage</button>
