@@ -132,6 +132,12 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
     return coordinates;
   };
 
+  // reshuffle function available once puzzle is solved
+  const reshuffleTiles = () => {
+    console.log("calling reshuffle function")
+    setPuzzleTiles(shuffleTiles(solutionTiles))
+  };
+
   // once the canvas is loaded re-size the canvas via JS api (for resolution), attach event handlers, and render images.
   React.useEffect(() => {
     let canvas = ref.current;
@@ -327,13 +333,15 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
             <h2><strong>Title:</strong> {data.objectName}</h2>
             <h3><strong>Artist:</strong> {data.artistName}</h3>
             <p><strong>Correctly placed tiles:</strong> {correctTiles} / {totalTiles}</p>
+            <div className="progress-bar-container">
+              <div className="progress-bar" style={{width : `${correctTiles / totalTiles * 100}%`}}>{correctTiles / totalTiles * 100}%</div>
+            </div>
           </div>
           <div className="home-button">
             <button onClick={() => changeState()}>Homepage</button>
           </div>
         </div>
         <div className="puzzle-container">
-          {/* TODO add <canvas> */}
           <canvas
             ref={ref}
             id="canvas"
@@ -344,7 +352,26 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
             }}
           ></canvas>
         </div>
-      
+        
+        {correctTiles !== totalTiles && (
+          <div className="instructions-container">
+            <h3>Instructions</h3>
+            <p>Drag and drop the image tiles to their correct locations to solve the puzzle.</p>
+          </div>
+        )}
+        
+        {correctTiles === totalTiles && (
+          <div className="instructions-container">
+            <h2>Success!</h2> 
+            <p>You solved the puzzle.</p>
+            <p>Use the Reshuffle button to play again, or use the Homepage button to select another image.</p>
+            <div className="success-options">
+              <button onClick={() => changeState()}>Return to Homepage</button>
+              <button onClick={() => reshuffleTiles()}>Play Again</button>
+            </div>
+          </div>
+        )}
+        
       </div>
     </div>
   );

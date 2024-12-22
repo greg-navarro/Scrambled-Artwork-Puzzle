@@ -298,7 +298,30 @@ select:focus {
   
 }
 
+.instructions-container {
+  grid-column: 3 / 4;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
+  text-align: center;
+}
+
+.success-options button {
+  padding: 0.75em 1.5em;
+  margin: 0.5em;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
 .controls-container {
+  grid-column: 1/2;
   height: 100%;
   display: grid;
   grid-template-columns: 1fr;
@@ -368,4 +391,24 @@ select:focus {
   font-size: 2rem;
   color: white;
   font-weight: bold;
+}
+
+/* Progress bar */
+.progress-bar-container {
+  background-color: red;
+  border-radius: 10px;
+  
+}
+
+.progress-bar {
+  background-color: #50db2a;
+  padding: 1em;
+  border-radius: 10px;
+}
+
+.success-options {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1em;
 }
