@@ -56,19 +56,24 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
     const [artObjectList, setArtObjectList] = React.useState([]);
     const [selectedOption, setSelectedOption] = React.useState(null);
     const [query, setQuery] = React.useState("");
-    const [difficulty, setDifficulty] = React.useState("z3");
+    const [difficulty, setDifficulty] = React.useState("z1");
+    const [loading, setLoading] = React.useState(true)
 
     React.useEffect(() => {
-      fetchRecords(query, page).then(response => setArtObjectList(response))
+      fetchRecords(query, page).then((response) => {
+        setArtObjectList(response)
+        setLoading(false)
+      })
       // console.log("useEffectFired")
     }, []);
 
     const nextPage = () => {
+      setLoading(true)
       // console.log(`what up ${page+1}`)
       fetchRecords(query, page+1).then((response) => {
         // console.log(response)
         setArtObjectList(response);
-        
+        setLoading(false)
       });    
       setPage(page+1);
       setSelectedOption(null);
@@ -76,10 +81,12 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     const previousPage = () => {
       if (page > 1) {
+        setLoading(true)
         // console.log(`what up ${page - 1}`);
         fetchRecords(query, page - 1).then((response) => {
           // console.log(response);
           setArtObjectList(response);
+          setLoading(false);
         });
         setPage(page - 1);
         setSelectedOption(null);
@@ -111,6 +118,9 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
       });
       // fetch image for each tile
       const levelDataWithImages = await fetchImages(levelData);
+      // Add additional data to object
+      levelDataWithImages.artistName = selectedOption.principalOrFirstMaker
+      levelDataWithImages.objectName = selectedOption.title
       // send this data to App so that it can pass is to <Puzzle />
       setPuzzleData(levelDataWithImages);
       // initiate change in state to Puzzle-mode
@@ -140,12 +150,27 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
           }}
           className={`option grid-container ${artObject === selectedOption ? "active": ""}`}
         >
-          <div className="flex-container"> 
-            <img className="inline-item" src={artObject.webImage.url} alt="art image" />
+          <div className="image"> 
+            <img className={`${artObject === selectedOption ? "selected-image" : "image"}`} src={artObject.webImage.url} alt="art image" />
           </div>
-          <div className="inline-item">
+          <div className="info">
             <h2>{artObject.title}</h2> 
             <p>{artObject.principalOrFirstMaker}</p>
+            {artObject === selectedOption && (<div className="difficulty-select">
+              <label>
+                {"Select Puzzle Difficulty:"}
+                <select value={difficulty} onChange={(e) => {setDifficulty(e.target.value)}}>
+                  <option value="z3">Easy</option>
+                  <option value="z2">Medium</option>
+                  <option value="z1">Hard</option>
+                </select>
+              </label>
+            </div>)}
+          </div>
+          
+      
+          <div className={`start-button ${artObject === selectedOption ? "": "hidden"}`}>
+            <button className="start-button" onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
           </div>
         </li>
       );
@@ -153,36 +178,52 @@ const Homepage = ({ startPuzzle, setPuzzleData }) => {
 
     return (
       <div>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-message">Loading...</div>
+        </div>
+      )}
+
         <div className="header">
-          <h1>Scrambled Artwork Puzzle</h1>
+          <div className="header-logo-container">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/6/67/Rijks_museum_logo.png"
+              alt="Rijks Museum Logo"
+              className="header-logo"
+            />
+            <h1>Scrambled Artwork Puzzle Game</h1>
+          </div>
           <div className="search-input flex-container">
-          <label htmlFor="search-query">Search query:</label>
-          <input
-            type="text"
-            name="search-query"
-            value={query}
-            onChange={(e) => performSearchQuery(e.target.value)}
-          ></input>
+            <label htmlFor="search-query"><strong>Search the collection:</strong></label>
+            <input
+              type="text"
+              name="search-query"
+              value={query}
+              onChange={(e) => performSearchQuery(e.target.value)}
+            ></input>
           </div>
         </div>
-        <ul className="results-container">
-          {artObjectList.map((object) => option(object))}
-        </ul>
+        {/* Conditional instructions */}
+        {selectedOption===null && (
+          <div className="selected-option-text">
+            <p><strong>Step 1:</strong> Select an artwork from the collection of Amsterdam's Rijks Museum.</p> {/* Adjust this to whatever info you want to display */}
+          </div>
+        )}
+        {selectedOption!==null && (
+          <div className="selected-option-text">
+            <p><strong>Step 2:</strong> Select puzzle difficulty level and press <strong>Start Puzzle</strong> button.</p> {/* Adjust this to whatever info you want to display */}
+          </div>
+        )}
+        {/* Scrollable container for artwork options */}
+        <div className="results-container">
+          <ul className="scrollable-list">
+            {artObjectList.map((object) => option(object))}
+          </ul>
+        </div>
         <div className="footer">
           <button onClick={() => previousPage()}>Previous page</button>
           <button onClick={() => nextPage()}>Next page</button>
           <br />
-          <button className="start-button" onClick={() => startPuzzleClickHandler()}> Start puzzle</button>
-          <br/>
-          <label>
-            {"select difficulty(if you are getting too few OR too many tiles adjust this):"}
-            <select value={difficulty} onChange={(e) => {setDifficulty(e.target.value)}}>
-              <option value="z4">Fewest tiles</option>
-              <option value="z3">A few tiles</option>
-              <option value="z2">More than a few tiles</option>
-              <option value="z1">Most tiles</option>
-            </select>
-          </label>
         </div>
       </div>
     );

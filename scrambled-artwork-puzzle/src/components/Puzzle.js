@@ -96,7 +96,7 @@ const calculateCanvasElementWidth = (height, tiles) => {
 }
 
 const Puzzle = ({ data, canvasHeight, changeState }) => {
-  console.log(canvasHeight)
+  console.log(data)
   let ref = React.useRef();
   // this variable will house all data about our puzzle (tiles: images, solution, current positions, widths, heights, etc.)
   let puzzleTiles = null;
@@ -287,24 +287,39 @@ const Puzzle = ({ data, canvasHeight, changeState }) => {
   return (
     <div className="full-height">
       <div className="header">
-        <h1>Scrambled Artwork Puzzle</h1>
-      </div>
-      <div className="flex-column">
-      <div className="flex-container">
-        {/* TODO add <canvas> */}
-        <canvas
-          ref={ref}
-          id="canvas"
-          style={{
-            width: "500px",
-            height: "500px",
-            border: "1px solid rgba(0, 0, 0, 0.05)",
-          }}
-        ></canvas>
-      </div>
-      <div className="flex-container flex-left">
-        <button onClick={() => changeState()}>return to previous page</button>
-      </div>
+          <div className="header-logo-container">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/6/67/Rijks_museum_logo.png"
+              alt="Rijks Museum Logo"
+              className="header-logo"
+            />
+            <h1>Scrambled Artwork Puzzle Game</h1>
+          </div>
+          
+        </div>
+      <div className="grid-container">
+        <div className="controls-container">
+          <div className="info">
+            <h2><strong>Title:</strong> {data.objectName}</h2>
+            <h3><strong>Artist:</strong> {data.artistName}</h3>
+          </div>
+          <div className="home-button">
+            <button onClick={() => changeState()}>Homepage</button>
+          </div>
+        </div>
+        <div className="puzzle-container">
+          {/* TODO add <canvas> */}
+          <canvas
+            ref={ref}
+            id="canvas"
+            style={{
+              width: "500px",
+              height: "500px",
+              border: "1px solid rgba(0, 0, 0, 0.05)",
+            }}
+          ></canvas>
+        </div>
+      
       </div>
     </div>
   );
